@@ -10,7 +10,7 @@ function MyDrawer({ open, onClose, children, ...rest }: DrawerProps) {
       anchor='right'
       {...rest}
     >
-      <Box sx={{ width: '500px' }}>{children}</Box>
+      <Box sx={{ width: { xs: '100%', lg: '500px' } }}>{children}</Box>
     </Drawer>
   );
 }

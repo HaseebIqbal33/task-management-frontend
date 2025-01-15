@@ -1,30 +1,26 @@
 import { useMutation } from '@tanstack/react-query';
-
 import { taskClient } from './taskClient';
-import { useAuthContext } from '@/context/authContext/authContext';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { queryClient } from '@/main';
+import { ITask } from '@/types';
 import { toast } from 'react-toastify';
 
-function useAddTask() {
-  const { user } = useAuthContext();
+function useUpdateTask() {
   const { item } = useLocalStorage('AUTH_TOKEN');
 
   taskClient.updateHeaders({ authorization: `Bearer ${item}` });
   return useMutation({
     mutationKey: ['Add new task'],
-    mutationFn: (body: object) =>
-      taskClient.post('/', {
+    mutationFn: (body: Partial<ITask>) =>
+      taskClient.put(`/${body?._id}`, {
         ...body,
-        userId: user?._id,
-        createdAt: new Date().toDateString(),
       }),
 
     onSuccess: () => {
-      toast.success('Task added successfully');
+      toast.success('Task updated successfully');
       queryClient.invalidateQueries({ queryKey: ['Tasks List'] });
     },
   });
 }
 
-export default useAddTask;
+export default useUpdateTask;

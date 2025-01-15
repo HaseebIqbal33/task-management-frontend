@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 
-import { styles } from './styles';
+import { getBackgroundColor, styles } from './styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ITask } from '@/types';
 
@@ -12,18 +12,32 @@ interface Props extends ITask {
 }
 
 function TaskItem({ onDeletTask, onSelectTask, ...rest }: Props) {
-  const { title, description, _id } = rest;
+  const { title, description, _id, completed, priority } = rest;
   return (
-    <Box sx={container} role='button' onClick={() => onSelectTask(rest)}>
+    <Box
+      sx={{ ...container, backgroundColor: getBackgroundColor(priority) }}
+      role='button'
+      onClick={() => onSelectTask(rest)}
+    >
       <Box>
-        <Typography>{title}</Typography>
-        <Typography variant='subtitle1'>{description}</Typography>
+        <Typography sx={{ textDecoration: completed ? 'line-through' : '' }}>
+          {title}
+        </Typography>
+        <Typography
+          variant='subtitle1'
+          sx={{ textDecoration: completed ? 'line-through' : '' }}
+        >
+          {description}
+        </Typography>
       </Box>
       <Box>
         <DeleteIcon
           sx={{ cursor: 'pointer' }}
           color='error'
-          onClick={() => _id && onDeletTask(_id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (_id) onDeletTask(_id);
+          }}
         />
       </Box>
     </Box>

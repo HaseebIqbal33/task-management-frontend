@@ -6,6 +6,7 @@ import Button from '@/ui-resusable/button';
 import { validationSchema } from './validationSchema';
 import useAddTask from '@/api/tasks/useAddTask';
 import { ITask } from '@/types';
+import useUpdateTask from '@/api/tasks/useUpdateTask';
 
 const initialValues = {
   _id: '',
@@ -17,17 +18,26 @@ const initialValues = {
 
 interface Props {
   task: ITask | null;
+  onSubmit: () => void;
 }
 
-function TaskForm({ task }: Props) {
-  const { mutate: addNewTask } = useAddTask();
+function TaskForm({ task, onSubmit }: Props) {
+  const { mutate: addNewTask, isPending: isTaskBeingAdded } = useAddTask();
+  const { mutate: updateTask, isPaused: isTaskBeingUpdated } = useUpdateTask();
 
   const buttonTitle = task ? 'Update Task' : 'Add Task';
 
   const handleSubmit = (values: ITask) => {
-    if (!task) {
-      delete values._id;
-      addNewTask(values);
+    try {
+      if (!task) {
+        delete values._id;
+        addNewTask(values);
+      } else {
+        updateTask(values);
+      }
+      onSubmit();
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -35,6 +45,7 @@ function TaskForm({ task }: Props) {
     <Box mx={2}>
       <Typography variant='h4'>{task ? task.title : 'Add Task'}</Typography>
       <Formik
+        key={task?._id}
         onSubmit={handleSubmit}
         initialValues={task ? task : initialValues}
         validationSchema={validationSchema}
@@ -64,7 +75,7 @@ function TaskForm({ task }: Props) {
             <Box mt={2} display={'flex'} alignItems={'center'}>
               <Checkbox
                 id='isCompleted'
-                value={values.completed}
+                defaultChecked={values.completed}
                 name='completed'
                 onChange={handleChange}
               />
@@ -72,7 +83,11 @@ function TaskForm({ task }: Props) {
             </Box>
 
             <Button
-              disabled={!!Object.keys(errors).length}
+              disabled={
+                !!Object.keys(errors).length ||
+                isTaskBeingAdded ||
+                isTaskBeingUpdated
+              }
               type='submit'
               sx={{ mt: 5 }}
             >

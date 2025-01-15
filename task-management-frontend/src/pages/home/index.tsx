@@ -1,15 +1,16 @@
 import useDeleteTask from '@/api/tasks/useDeleteTask';
 import useTasks from '@/api/tasks/useTasks';
+import Header from '@/components/header';
 import TaskForm from '@/components/taskform';
 import TaskItem from '@/components/taskItem';
 import { ITask } from '@/types';
 import Button from '@/ui-resusable/button';
 import MyDrawer from '@/ui-resusable/drawer';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { useState } from 'react';
 
 function HomePage() {
-  const { data } = useTasks();
+  const { data, isLoading } = useTasks();
   const { mutate: deleteTask } = useDeleteTask();
   const [open, setOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
@@ -23,24 +24,46 @@ function HomePage() {
     setOpen(true);
   };
 
+  const closeDrawer = () => {
+    setOpen(false);
+    setSelectedTask(null);
+  };
+
   return (
     <Box>
-      <Button onClick={() => setOpen(true)}>Add a new task</Button>
+      <Header />
 
-      <MyDrawer open={open} onClose={() => setOpen(false)}>
+      <Box display={'flex'} alignContent={'center'} justifyContent={'center'}>
+        <Box
+          display={'flex'}
+          flexDirection={'column'}
+          gap={2}
+          width={{ xs: '100%', lg: '600px' }}
+        >
+          <Button size='small' sx={{ mt: 2 }} onClick={() => setOpen(true)}>
+            Add a new task
+          </Button>
+          {isLoading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
+              <CircularProgress />
+            </Box>
+          )}
+          {data?.data?.map((task) => (
+            <TaskItem
+              key={task._id}
+              {...task}
+              onSelectTask={selectedTaskHandler}
+              onDeletTask={deleteTaskHandler}
+            />
+          ))}
+        </Box>
+      </Box>
+
+      <MyDrawer open={open} onClose={closeDrawer}>
         <Box>
-          <TaskForm task={selectedTask} />
+          <TaskForm task={selectedTask} onSubmit={closeDrawer} />
         </Box>
       </MyDrawer>
-      <Box display={'flex'} flexDirection={'column'} gap={2}>
-        {data?.data?.map((task) => (
-          <TaskItem
-            {...task}
-            onSelectTask={selectedTaskHandler}
-            onDeletTask={deleteTaskHandler}
-          />
-        ))}
-      </Box>
     </Box>
   );
 }
