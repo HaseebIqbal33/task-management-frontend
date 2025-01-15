@@ -4,6 +4,7 @@ import { authClient } from './authClient';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/context/authContext/authContext';
 import { ResponseT } from '@/types';
+import { APP_ROUTES } from '@/components/routes/routes';
 
 function useLogin() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ function useLogin() {
       authClient.post<
         ResponseT<{
           token: string;
-          user: { id: string; name: string; email: string };
+          user: { _id: string; name: string; email: string };
         }>
       >('/login', body),
 
@@ -23,7 +24,7 @@ function useLogin() {
       if (data?.data?.token && data?.data?.user) {
         console.log('here');
         login(data?.data?.token, data?.data?.user);
-        navigate('/');
+        navigate(APP_ROUTES.HOME);
       }
     },
   });

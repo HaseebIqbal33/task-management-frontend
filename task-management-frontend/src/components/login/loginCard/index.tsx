@@ -8,6 +8,7 @@ import Button from '@/ui-resusable/button';
 import { Formik } from 'formik';
 import { validationSchema } from './validationSchema';
 import useLogin from '@/api/auth/useLogin';
+import { Link } from 'react-router-dom';
 
 const initialValues = { email: '', password: '' };
 
@@ -59,6 +60,15 @@ const LoginCard = () => {
             );
           }}
         </Formik>
+        <Link to={'/register'} style={{ textDecoration: 'none' }}>
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            textAlign={'center'}
+          >
+            does not have an account? sign up
+          </Typography>
+        </Link>
       </CardContent>
     </Card>
   );
