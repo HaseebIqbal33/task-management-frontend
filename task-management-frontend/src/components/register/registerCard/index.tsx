@@ -64,7 +64,7 @@ const RegisterCard = () => {
                 <CardActions
                   sx={{ display: 'flex', justifyContent: 'flex-end' }}
                 >
-                  <Button type='submit'>Login</Button>
+                  <Button type='submit'>Register</Button>
                 </CardActions>
               </form>
             );
