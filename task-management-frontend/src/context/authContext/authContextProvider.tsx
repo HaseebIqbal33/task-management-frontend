@@ -2,6 +2,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import { AuthContextContainer } from './authContext';
 import { IAuth } from './type';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { queryClient } from '@/main';
 
 function AuthContextProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<IAuth['user']>(null);
@@ -25,6 +26,7 @@ function AuthContextProvider({ children }: PropsWithChildren) {
   const logout = () => {
     setUser(null);
     clearStorage();
+    queryClient.clear();
   };
 
   return (

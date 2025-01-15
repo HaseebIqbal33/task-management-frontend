@@ -1,5 +1,6 @@
+import { CONFIGS } from '@/configs';
 import { Api } from '../Api';
 
 export const authClient = new Api({
-  baseURL: 'http://localhost:5000/api/v1/auth',
+  baseURL: `${CONFIGS.BACKEND.URL}/auth`,
 });
