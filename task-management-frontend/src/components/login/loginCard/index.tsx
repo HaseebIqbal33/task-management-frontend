@@ -66,7 +66,7 @@ const LoginCard = () => {
             color='text.secondary'
             textAlign={'center'}
           >
-            does not have an account? sign up
+            do not have an account? sign up
           </Typography>
         </Link>
       </CardContent>

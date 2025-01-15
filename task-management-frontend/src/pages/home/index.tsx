@@ -8,9 +8,16 @@ import Button from '@/ui-resusable/button';
 import MyDrawer from '@/ui-resusable/drawer';
 import { Box, CircularProgress } from '@mui/material';
 import { useState } from 'react';
+import TaskFilters from '@/components/taskFilters';
+
+export interface IFilter {
+  priority: string;
+  completed: boolean | undefined;
+}
 
 function HomePage() {
-  const { data, isLoading } = useTasks();
+  const [filter, setFilter] = useState<IFilter | undefined>(undefined);
+  const { data, isLoading } = useTasks(filter);
   const { mutate: deleteTask } = useDeleteTask();
   const [open, setOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
@@ -43,6 +50,9 @@ function HomePage() {
           <Button size='small' sx={{ mt: 2 }} onClick={() => setOpen(true)}>
             Add a new task
           </Button>
+
+          <TaskFilters filter={filter} setFilter={setFilter} />
+
           {isLoading && (
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
               <CircularProgress />
