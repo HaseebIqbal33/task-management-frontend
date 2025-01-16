@@ -33,3 +33,15 @@ This is the frontend for the Task Management System, built with React, TypeScrip
    ```bash
    git clone <repository-url>
    ```
+
+2. **Install the dependencies:**
+
+```bash
+npm install
+```
+
+3. **Run Project:**
+
+```bash
+npm run dev
+```
