@@ -20,7 +20,7 @@ function useTasks(filters?: IFilter) {
   }
 
   return useQuery({
-    queryKey: ['Tasks List', filters], // Use the entire filters object for better cache invalidation
+    queryKey: ['Tasks List', filters],
     queryFn: () =>
       taskClient.get<{ data: ITask[] }>('/', {
         userId: user?._id || '',

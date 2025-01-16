@@ -8,7 +8,6 @@ export const styles = {
     p: 2,
     display: 'flex',
     justifyContent: 'space-between',
-    cursor: 'pointer',
   },
 } satisfies IStyles;
 

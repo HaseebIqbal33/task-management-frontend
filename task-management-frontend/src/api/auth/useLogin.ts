@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/context/authContext/authContext';
 import { ResponseT } from '@/types';
 import { APP_ROUTES } from '@/components/routes/routes';
+import { toast } from 'react-toastify';
 
 function useLogin() {
   const navigate = useNavigate();
@@ -26,6 +27,10 @@ function useLogin() {
         login(data?.data?.token, data?.data?.user);
         navigate(APP_ROUTES.HOME);
       }
+    },
+    onError: (error) => {
+      console.log(error, 'ERROR');
+      toast.error('Login Error, Wrong Credentials');
     },
   });
 }
