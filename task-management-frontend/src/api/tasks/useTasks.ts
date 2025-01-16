@@ -3,9 +3,9 @@ import { taskClient } from './taskClient';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { ITask } from '@/types';
 import { useAuthContext } from '@/context/authContext/authContext';
-import { IFilter } from '@/pages/home';
+import { IFilter } from '@/components/taskList';
 
-function useTasks(filters?: IFilter) {
+function useTasks(filters?: IFilter, pageSize = '5', currentPage = '1') {
   const { user } = useAuthContext();
   const { item } = useLocalStorage('AUTH_TOKEN');
 
@@ -20,10 +20,12 @@ function useTasks(filters?: IFilter) {
   }
 
   return useQuery({
-    queryKey: ['Tasks List', filters],
+    queryKey: ['Tasks List', filters, pageSize, currentPage],
     queryFn: () =>
-      taskClient.get<{ data: ITask[] }>('/', {
+      taskClient.get<{ data: { tasks: ITask[]; total: number } }>('/', {
         userId: user?._id || '',
+        pageSize,
+        currentPage,
         ...apiFilters,
       }),
   });

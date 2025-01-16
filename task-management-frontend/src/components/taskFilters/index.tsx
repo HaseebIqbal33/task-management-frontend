@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import TaskPriority from './taskPriority';
 import TaskCompleted from './taskCompleted';
-import { IFilter } from '@/pages/home';
+import { IFilter } from '../taskList';
 
 function TaskFilters({
   filter,

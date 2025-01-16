@@ -24,6 +24,7 @@ function TaskItem({ onDeletTask, onSelectTask, ...rest }: Props) {
     <Box sx={{ ...container, backgroundColor: getBackgroundColor(priority) }}>
       <Box display={'flex'} alignItems={'center'} gap={2} flex={1}>
         <Checkbox
+          key={JSON.stringify(completed)}
           defaultChecked={completed}
           name='completed'
           onChange={handleChange}
